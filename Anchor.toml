@@ -1,0 +1,16 @@
+[toolchain]
+package_manager = "yarn"
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.devnet]
+ajorithm = "DNxjy5KkrdJsuf9NNRMcdEuiuME1yV9Rxb8ETLJyAV9f"
+
+[provider]
+cluster = "devnet"
+wallet = "/home/adullamite/.config/solana/id.json"
+
+[scripts]
+test = "cargo test"
