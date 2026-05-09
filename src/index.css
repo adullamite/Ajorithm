@@ -1,0 +1,342 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* ===== DARK THEME (default) ===== */
+  :root {
+    --background: 240 4% 7%;
+    --foreground: 340 4% 90%;
+
+    --card: 330 3% 12%;
+    --card-foreground: 340 4% 90%;
+
+    --popover: 330 3% 12%;
+    --popover-foreground: 340 4% 90%;
+
+    --primary: 253 100% 87%;
+    --primary-foreground: 253 58% 26%;
+
+    --secondary: 155 70% 59%;
+    --secondary-foreground: 155 90% 10%;
+
+    --muted: 330 3% 16%;
+    --muted-foreground: 340 4% 64%;
+
+    --accent: 155 100% 44%;
+    --accent-foreground: 155 100% 10%;
+
+    --destructive: 10 80% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 330 3% 18%;
+    --input: 330 3% 18%;
+    --ring: 253 100% 87%;
+
+    --radius: 1.5rem;
+
+    --surface: 240 4% 7%;
+    --surface-container: 330 3% 12%;
+    --on-surface: 340 4% 90%;
+    --primary-container: 262 58% 26%;
+    --tertiary: 155 100% 44%;
+    --neon: 155 95% 51%;
+
+    --sidebar-background: 240 4% 7%;
+    --sidebar-foreground: 340 4% 90%;
+    --sidebar-primary: 253 100% 87%;
+    --sidebar-primary-foreground: 253 58% 26%;
+    --sidebar-accent: 330 3% 16%;
+    --sidebar-accent-foreground: 340 4% 90%;
+    --sidebar-border: 330 3% 18%;
+    --sidebar-ring: 253 100% 87%;
+
+    /* Glass tokens */
+    --glass-bg: 330 3% 12%;
+    --glass-border: 330 3% 22%;
+    --glass-blur: 20px;
+
+    /* Toast colors */
+    --toast-success: 155 70% 59%;
+    --toast-error: 10 80% 84%;
+    --toast-warning: 38 92% 50%;
+    --toast-info: 253 100% 87%;
+
+    /* Transitions */
+    --transition-theme: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* ===== LIGHT THEME ===== */
+  .light {
+    --background: 210 20% 98%;
+    --foreground: 220 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 47% 11%;
+
+    --primary: 253 58% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 155 70% 40%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 210 20% 94%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 155 100% 36%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 88%;
+    --input: 214 32% 88%;
+    --ring: 253 58% 45%;
+
+    --surface: 210 20% 98%;
+    --surface-container: 0 0% 100%;
+    --on-surface: 220 47% 11%;
+    --primary-container: 253 100% 94%;
+    --tertiary: 155 100% 36%;
+    --neon: 155 95% 44%;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 47% 11%;
+    --sidebar-primary: 253 58% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 20% 94%;
+    --sidebar-accent-foreground: 220 47% 11%;
+    --sidebar-border: 214 32% 88%;
+    --sidebar-ring: 253 58% 45%;
+
+    --glass-bg: 0 0% 100%;
+    --glass-border: 214 32% 91%;
+    --glass-blur: 20px;
+
+    --toast-success: 155 70% 40%;
+    --toast-error: 0 84% 60%;
+    --toast-warning: 38 92% 50%;
+    --toast-info: 253 58% 45%;
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+    transition: var(--transition-theme);
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  code, .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  /* Glassmorphism card */
+  .glass {
+    background: hsl(var(--glass-bg) / 0.6);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid hsl(var(--glass-border) / 0.4);
+    border-radius: var(--radius);
+  }
+
+  .glass-strong {
+    background: hsl(var(--glass-bg) / 0.8);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid hsl(var(--glass-border) / 0.5);
+    border-radius: var(--radius);
+  }
+
+  /* Neon glow effect */
+  .neon-glow {
+    box-shadow: 0 0 20px hsl(var(--neon) / 0.3), 0 0 40px hsl(var(--neon) / 0.15);
+  }
+
+  .neon-text {
+    text-shadow: 0 0 20px hsl(var(--neon) / 0.5);
+  }
+
+  /* Primary glow */
+  .primary-glow {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.3), 0 0 40px hsl(var(--primary) / 0.15);
+  }
+
+  /* Badge glows */
+  .glow-gold {
+    box-shadow: 0 0 16px rgba(255, 215, 0, 0.5), 0 0 32px rgba(255, 215, 0, 0.25);
+  }
+  .glow-silver {
+    box-shadow: 0 0 16px rgba(192, 192, 192, 0.5), 0 0 32px rgba(192, 192, 192, 0.25);
+  }
+  .glow-bronze {
+    box-shadow: 0 0 16px rgba(205, 127, 50, 0.5), 0 0 32px rgba(205, 127, 50, 0.25);
+  }
+
+  /* Pulse chip animation */
+  .pulse-chip {
+    animation: pulseChip 2s ease-in-out infinite;
+  }
+
+  /* Progress bar for toast */
+  .toast-progress {
+    animation: toastProgress linear forwards;
+  }
+
+  /* Slide in from right */
+  .slide-in-right {
+    animation: slideInRight 0.3s ease-out forwards;
+  }
+
+  .slide-out-right {
+    animation: slideOutRight 0.3s ease-in forwards;
+  }
+
+  /* Skeleton pulse */
+  .skeleton-pulse {
+    animation: skeletonPulse 1.5s ease-in-out infinite;
+  }
+
+  /* Wallet button overrides */
+  .wallet-adapter-button {
+    background: hsl(var(--primary-container)) !important;
+    color: hsl(var(--primary)) !important;
+    border-radius: 12px !important;
+    font-family: 'Inter', system-ui, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.875rem !important;
+    padding: 0.5rem 1.25rem !important;
+    border: 1px solid hsl(var(--primary) / 0.2) !important;
+    transition: all 0.2s ease !important;
+    height: 40px !important;
+  }
+
+  .wallet-adapter-button:hover {
+    background: hsl(var(--primary-container) / 0.8) !important;
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.25) !important;
+  }
+
+  .wallet-adapter-button-trigger {
+    background: hsl(var(--primary-container)) !important;
+  }
+
+  .wallet-adapter-modal-wrapper {
+    background: hsl(var(--surface-container)) !important;
+    border: 1px solid hsl(var(--border)) !important;
+    border-radius: var(--radius) !important;
+  }
+
+  .wallet-adapter-modal-button-close {
+    background: hsl(var(--muted)) !important;
+  }
+
+  .wallet-adapter-modal-list li {
+    background: hsl(var(--muted)) !important;
+    border-radius: 12px !important;
+  }
+
+  /* Mobile wallet button — compact and on-screen */
+  @media (max-width: 767px) {
+    .wallet-mobile-wrapper .wallet-adapter-button {
+      max-width: 140px !important;
+      padding: 0.4rem 0.75rem !important;
+      font-size: 0.75rem !important;
+      height: 36px !important;
+      border-radius: 10px !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+    }
+    .wallet-mobile-wrapper .wallet-adapter-button-start-icon {
+      margin-right: 4px !important;
+    }
+    .wallet-mobile-wrapper .wallet-adapter-button-start-icon img {
+      width: 16px !important;
+      height: 16px !important;
+    }
+  }
+
+  @media (max-width: 374px) {
+    .wallet-mobile-wrapper .wallet-adapter-button {
+      max-width: 110px !important;
+      padding: 0.35rem 0.5rem !important;
+      font-size: 0.7rem !important;
+    }
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@keyframes pulseChip {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes toastProgress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
