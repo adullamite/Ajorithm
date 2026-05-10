@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useCallback, useState } from 'react';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey, SystemProgram, LAMPORTS_PER_SOL } from '@solana/web3.js';
@@ -8,6 +9,16 @@ import idl from '../idl/ajorithmIDL.json';
 const PROGRAM_ID = new PublicKey('DNxjy5KkrdJsuf9NNRMcdEuiuME1yV9Rxb8ETLJyAV9f');
 
 export interface PactState {
+=======
+import { useCallback, useState } from "react";
+import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
+import { PublicKey, SystemProgram } from "@solana/web3.js";
+import { BN } from "@coral-xyz/anchor";
+import { getProgram, getPactPDA, getEscrowPDA, getReputationPDA } from "@/lib/anchorProvider";
+import { PROGRAM_ID, solToLamports } from "@/lib/constants";
+
+export interface PactAccount {
+>>>>>>> main
   publicKey: PublicKey;
   organizer: PublicKey;
   name: string;
@@ -22,7 +33,11 @@ export interface PactState {
   bump: number;
 }
 
+<<<<<<< HEAD
 export interface ReputationState {
+=======
+export interface ReputationAccount {
+>>>>>>> main
   member: PublicKey;
   contributionsMade: number;
   contributionsMissed: number;
@@ -30,6 +45,7 @@ export interface ReputationState {
   bump: number;
 }
 
+<<<<<<< HEAD
 function getProgram(provider: AnchorProvider) {
   return new Program(idl as any, provider);
 }
@@ -80,21 +96,55 @@ export function useAjorithm() {
             pact: pactPda,
             organizerReputation: reputationPda,
             escrow: escrowPda,
+=======
+export function useAjorithm() {
+  const wallet = useAnchorWallet();
+  const { connection } = useConnection();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const createPact = useCallback(
+    async (name: string, contributionAmountSol: number, maxMembers: number) => {
+      if (!wallet) throw new Error("Wallet not connected");
+      setLoading(true);
+      setError(null);
+      try {
+        const program = getProgram(wallet);
+        const [pactPDA] = getPactPDA(wallet.publicKey, name);
+        const [escrowPDA] = getEscrowPDA(pactPDA);
+        const [reputationPDA] = getReputationPDA(wallet.publicKey, pactPDA);
+        const lamports = new BN(solToLamports(contributionAmountSol));
+
+        const tx = await program.methods
+          .createPact(name, lamports, maxMembers)
+          .accounts({
+            pact: pactPDA,
+            organizerReputation: reputationPDA,
+            escrow: escrowPDA,
+>>>>>>> main
             organizer: wallet.publicKey,
             systemProgram: SystemProgram.programId,
           })
           .rpc();
 
+<<<<<<< HEAD
         triggerToast({ type: 'success', title: 'Pact created on-chain!', message: `TX: ${tx.slice(0, 8)}...` });
         return { pactAddress: pactPda, tx };
       } catch (err: any) {
         const msg = err?.message || 'Failed to create pact';
         triggerToast({ type: 'error', title: 'Create Pact Failed', message: msg });
         return null;
+=======
+        return { tx, pactAddress: pactPDA.toBase58() };
+      } catch (e: any) {
+        setError(e.message || "Failed to create pact");
+        throw e;
+>>>>>>> main
       } finally {
         setLoading(false);
       }
     },
+<<<<<<< HEAD
     [connection, wallet]
   );
 
@@ -120,21 +170,49 @@ export function useAjorithm() {
           .accounts({
             pact: pactAddress,
             memberReputation: reputationPda,
+=======
+    [wallet]
+  );
+
+  const joinPact = useCallback(
+    async (pactAddress: string) => {
+      if (!wallet) throw new Error("Wallet not connected");
+      setLoading(true);
+      setError(null);
+      try {
+        const program = getProgram(wallet);
+        const pactPubkey = new PublicKey(pactAddress);
+        const [reputationPDA] = getReputationPDA(wallet.publicKey, pactPubkey);
+
+        const tx = await program.methods
+          .joinPact()
+          .accounts({
+            pact: pactPubkey,
+            memberReputation: reputationPDA,
+>>>>>>> main
             member: wallet.publicKey,
             systemProgram: SystemProgram.programId,
           })
           .rpc();
 
+<<<<<<< HEAD
         triggerToast({ type: 'success', title: 'You joined the pact!', message: `TX: ${tx.slice(0, 8)}...` });
         return tx;
       } catch (err: any) {
         const msg = err?.message || 'Failed to join pact';
         triggerToast({ type: 'error', title: 'Join Pact Failed', message: msg });
         return null;
+=======
+        return { tx };
+      } catch (e: any) {
+        setError(e.message || "Failed to join pact");
+        throw e;
+>>>>>>> main
       } finally {
         setLoading(false);
       }
     },
+<<<<<<< HEAD
     [connection, wallet]
   );
 
@@ -166,21 +244,51 @@ export function useAjorithm() {
             pact: pactAddress,
             memberReputation: reputationPda,
             escrow: escrowPda,
+=======
+    [wallet]
+  );
+
+  const contribute = useCallback(
+    async (pactAddress: string) => {
+      if (!wallet) throw new Error("Wallet not connected");
+      setLoading(true);
+      setError(null);
+      try {
+        const program = getProgram(wallet);
+        const pactPubkey = new PublicKey(pactAddress);
+        const [escrowPDA] = getEscrowPDA(pactPubkey);
+        const [reputationPDA] = getReputationPDA(wallet.publicKey, pactPubkey);
+
+        const tx = await program.methods
+          .contribute()
+          .accounts({
+            pact: pactPubkey,
+            memberReputation: reputationPDA,
+            escrow: escrowPDA,
+>>>>>>> main
             member: wallet.publicKey,
             systemProgram: SystemProgram.programId,
           })
           .rpc();
 
+<<<<<<< HEAD
         triggerToast({ type: 'success', title: 'Contribution sent!', message: `TX: ${tx.slice(0, 8)}...` });
         return tx;
       } catch (err: any) {
         const msg = err?.message || 'Failed to contribute';
         triggerToast({ type: 'error', title: 'Contribution Failed', message: msg });
         return null;
+=======
+        return { tx };
+      } catch (e: any) {
+        setError(e.message || "Failed to contribute");
+        throw e;
+>>>>>>> main
       } finally {
         setLoading(false);
       }
     },
+<<<<<<< HEAD
     [connection, wallet]
   );
 
@@ -207,21 +315,50 @@ export function useAjorithm() {
             pact: pactAddress,
             escrow: escrowPda,
             recipient: recipientAddress,
+=======
+    [wallet]
+  );
+
+  const releasePayout = useCallback(
+    async (pactAddress: string, recipientAddress: string) => {
+      if (!wallet) throw new Error("Wallet not connected");
+      setLoading(true);
+      setError(null);
+      try {
+        const program = getProgram(wallet);
+        const pactPubkey = new PublicKey(pactAddress);
+        const [escrowPDA] = getEscrowPDA(pactPubkey);
+
+        const tx = await program.methods
+          .releasePayout()
+          .accounts({
+            pact: pactPubkey,
+            escrow: escrowPDA,
+            recipient: new PublicKey(recipientAddress),
+>>>>>>> main
             organizer: wallet.publicKey,
             systemProgram: SystemProgram.programId,
           })
           .rpc();
 
+<<<<<<< HEAD
         triggerToast({ type: 'success', title: 'Payout released!', message: `TX: ${tx.slice(0, 8)}...` });
         return tx;
       } catch (err: any) {
         const msg = err?.message || 'Failed to release payout';
         triggerToast({ type: 'error', title: 'Release Payout Failed', message: msg });
         return null;
+=======
+        return { tx };
+      } catch (e: any) {
+        setError(e.message || "Failed to release payout");
+        throw e;
+>>>>>>> main
       } finally {
         setLoading(false);
       }
     },
+<<<<<<< HEAD
     [connection, wallet]
   );
 
@@ -307,10 +444,19 @@ export function useAjorithm() {
 
     try {
       const program = getProgram(provider);
+=======
+    [wallet]
+  );
+
+  const fetchAllPacts = useCallback(async (): Promise<PactAccount[]> => {
+    try {
+      const program = getProgram(wallet!);
+>>>>>>> main
       const accounts = await (program.account as any).pactState.all();
       return accounts.map((a: any) => ({
         publicKey: a.publicKey,
         ...a.account,
+<<<<<<< HEAD
       })) as PactState[];
     } catch {
       return [];
@@ -319,13 +465,61 @@ export function useAjorithm() {
 
   return {
     loading,
+=======
+      }));
+    } catch {
+      return [];
+    }
+  }, [wallet]);
+
+  const fetchPact = useCallback(
+    async (address: string): Promise<PactAccount | null> => {
+      try {
+        const program = getProgram(wallet!);
+        const pubkey = new PublicKey(address);
+        const account = await (program.account as any).pactState.fetch(pubkey);
+        return { publicKey: pubkey, ...account };
+      } catch {
+        return null;
+      }
+    },
+    [wallet]
+  );
+
+  const fetchReputation = useCallback(
+    async (memberAddress: string, pactAddress: string): Promise<ReputationAccount | null> => {
+      try {
+        const program = getProgram(wallet!);
+        const [reputationPDA] = getReputationPDA(
+          new PublicKey(memberAddress),
+          new PublicKey(pactAddress)
+        );
+        const account = await (program.account as any).reputationState.fetch(reputationPDA);
+        return account;
+      } catch {
+        return null;
+      }
+    },
+    [wallet]
+  );
+
+  return {
+>>>>>>> main
     createPact,
     joinPact,
     contribute,
     releasePayout,
+<<<<<<< HEAD
     updateReputation,
     fetchPact,
     fetchReputation,
     fetchAllPacts,
+=======
+    fetchAllPacts,
+    fetchPact,
+    fetchReputation,
+    loading,
+    error,
+>>>>>>> main
   };
 }
