@@ -1,0 +1,109 @@
+{
+  "address": "DNxjy5KkrdJsuf9NNRMcdEuiuME1yV9Rxb8ETLJyAV9f",
+  "metadata": { "name": "ajorithm", "version": "0.1.0", "spec": "0.1.0" },
+  "instructions": [
+    {
+      "name": "contribute",
+      "discriminator": [82,33,68,131,32,0,205,95],
+      "accounts": [
+        {"name": "pact", "writable": true},
+        {"name": "member_reputation", "writable": true, "pda": {"seeds": [{"kind": "const", "value": [114,101,112,117,116,97,116,105,111,110]}, {"kind": "account", "path": "member"}, {"kind": "account", "path": "pact"}]}},
+        {"name": "escrow", "writable": true, "pda": {"seeds": [{"kind": "const", "value": [101,115,99,114,111,119]}, {"kind": "account", "path": "pact"}]}},
+        {"name": "member", "writable": true, "signer": true},
+        {"name": "system_program", "address": "11111111111111111111111111111111"}
+      ],
+      "args": []
+    },
+    {
+      "name": "create_pact",
+      "discriminator": [59,173,189,6,111,116,205,217],
+      "accounts": [
+        {"name": "pact", "writable": true, "pda": {"seeds": [{"kind": "const", "value": [112,97,99,116]}, {"kind": "account", "path": "organizer"}, {"kind": "arg", "path": "name"}]}},
+        {"name": "organizer_reputation", "writable": true, "pda": {"seeds": [{"kind": "const", "value": [114,101,112,117,116,97,116,105,111,110]}, {"kind": "account", "path": "organizer"}, {"kind": "account", "path": "pact"}]}},
+        {"name": "escrow", "writable": true, "pda": {"seeds": [{"kind": "const", "value": [101,115,99,114,111,119]}, {"kind": "account", "path": "pact"}]}},
+        {"name": "organizer", "writable": true, "signer": true},
+        {"name": "system_program", "address": "11111111111111111111111111111111"}
+      ],
+      "args": [{"name": "name", "type": "string"}, {"name": "contribution_amount", "type": "u64"}, {"name": "max_members", "type": "u8"}]
+    },
+    {
+      "name": "join_pact",
+      "discriminator": [193,195,179,242,90,46,243,218],
+      "accounts": [
+        {"name": "pact", "writable": true},
+        {"name": "member_reputation", "writable": true, "pda": {"seeds": [{"kind": "const", "value": [114,101,112,117,116,97,116,105,111,110]}, {"kind": "account", "path": "member"}, {"kind": "account", "path": "pact"}]}},
+        {"name": "member", "writable": true, "signer": true},
+        {"name": "system_program", "address": "11111111111111111111111111111111"}
+      ],
+      "args": []
+    },
+    {
+      "name": "release_payout",
+      "discriminator": [181,87,198,92,64,3,24,155],
+      "accounts": [
+        {"name": "pact", "writable": true},
+        {"name": "escrow", "writable": true, "pda": {"seeds": [{"kind": "const", "value": [101,115,99,114,111,119]}, {"kind": "account", "path": "pact"}]}},
+        {"name": "recipient", "writable": true},
+        {"name": "organizer", "writable": true, "signer": true},
+        {"name": "system_program", "address": "11111111111111111111111111111111"}
+      ],
+      "args": []
+    },
+    {
+      "name": "update_reputation",
+      "discriminator": [194,220,43,201,54,209,49,178],
+      "accounts": [
+        {"name": "pact", "writable": true},
+        {"name": "member_reputation", "writable": true, "pda": {"seeds": [{"kind": "const", "value": [114,101,112,117,116,97,116,105,111,110]}, {"kind": "account", "path": "member"}, {"kind": "account", "path": "pact"}]}},
+        {"name": "member"},
+        {"name": "organizer", "writable": true, "signer": true}
+      ],
+      "args": [{"name": "missed", "type": "bool"}]
+    }
+  ],
+  "accounts": [
+    {"name": "PactState", "discriminator": [168,75,149,53,201,238,222,152]},
+    {"name": "ReputationState", "discriminator": [245,80,180,222,93,218,20,207]}
+  ],
+  "errors": [
+    {"code": 6000, "name": "NameTooLong", "msg": "Pact name must be 32 characters or less"},
+    {"code": 6001, "name": "InvalidMemberCount", "msg": "Member count must be between 2 and 10"},
+    {"code": 6002, "name": "InvalidAmount", "msg": "Contribution amount must be greater than zero"},
+    {"code": 6003, "name": "PactNotActive", "msg": "Pact is not active"},
+    {"code": 6004, "name": "PactFull", "msg": "Pact is full"},
+    {"code": 6005, "name": "AlreadyMember", "msg": "Already a member of this pact"},
+    {"code": 6006, "name": "NotAMember", "msg": "Not a member of this pact"},
+    {"code": 6007, "name": "NotOrganizer", "msg": "Only the organizer can trigger payouts"},
+    {"code": 6008, "name": "AllRoundsComplete", "msg": "All rounds are complete"},
+    {"code": 6009, "name": "WrongRecipient", "msg": "Wrong recipient for this round"},
+    {"code": 6010, "name": "InsufficientFunds", "msg": "Insufficient funds in escrow"}
+  ],
+  "types": [
+    {
+      "name": "PactState",
+      "type": {"kind": "struct", "fields": [
+        {"name": "organizer", "type": "pubkey"},
+        {"name": "name", "type": "string"},
+        {"name": "contribution_amount", "type": "u64"},
+        {"name": "max_members", "type": "u8"},
+        {"name": "current_members", "type": "u8"},
+        {"name": "current_round", "type": "u8"},
+        {"name": "total_rounds", "type": "u8"},
+        {"name": "is_active", "type": "bool"},
+        {"name": "members", "type": {"vec": "pubkey"}},
+        {"name": "payout_order", "type": {"vec": "pubkey"}},
+        {"name": "bump", "type": "u8"}
+      ]}
+    },
+    {
+      "name": "ReputationState",
+      "type": {"kind": "struct", "fields": [
+        {"name": "member", "type": "pubkey"},
+        {"name": "contributions_made", "type": "u16"},
+        {"name": "contributions_missed", "type": "u16"},
+        {"name": "streak", "type": "u16"},
+        {"name": "bump", "type": "u8"}
+      ]}
+    }
+  ]
+}
