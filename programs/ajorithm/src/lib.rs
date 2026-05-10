@@ -1,3 +1,15 @@
+//! # Ajorithm Smart Contract
+//! Rotating savings groups (Ajo/Esusu) on Solana
+//!
+//! Solana Libraries & SDKs used:
+//! - anchor_lang::prelude::* — program framework, PDAs, accounts
+//! - anchor_lang::solana_program::system_instruction — native SOL transfers
+//! - anchor_lang::solana_program::program::invoke — CPI calls
+//! - Solana PDA seeds & bump verification
+//! - Onchain Vec<Pubkey> member management
+//! - Custom error codes via #[error_code]
+//! - Account space calculation for dynamic sizing
+
 use anchor_lang::prelude::*;
 
 declare_id!("DNxjy5KkrdJsuf9NNRMcdEuiuME1yV9Rxb8ETLJyAV9f");
