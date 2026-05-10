@@ -5,7 +5,6 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { ThemeToggle } from './ThemeToggle';
 import { cn } from '@/lib/utils';
-import { useTheme } from '@/hooks/useTheme';
 import logoSvg from '@/assets/logo.svg';
 
 const navLinks = [
@@ -15,37 +14,15 @@ const navLinks = [
 ];
 
 function Logo({ size = 'md' }: { size?: 'sm' | 'md' }) {
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
-
   return (
-    <div className="flex items-center gap-2.5">
-      <div
-        className={cn(
-          'rounded-xl overflow-hidden flex items-center justify-center transition-all duration-300',
-          size === 'md' ? 'w-10 h-10' : 'w-8 h-8',
-          isDark ? 'bg-transparent' : 'bg-[#0A0A0B] p-0.5'
-        )}
-      >
-        <img
-          src={logoSvg}
-          alt="Ajorithm Logo"
-          className={cn(
-            'object-contain transition-all duration-300',
-            size === 'md' ? 'w-10 h-10' : 'w-8 h-8'
-          )}
-        />
-      </div>
-      <span
-        className={cn(
-          'font-bold tracking-tight transition-colors duration-300',
-          size === 'md' ? 'text-xl' : 'text-lg',
-          isDark ? 'text-white' : 'text-[#0A0A0B]'
-        )}
-      >
-        Ajorithm
-      </span>
-    </div>
+    <img
+      src={logoSvg}
+      alt="Ajorithm Logo"
+      className={cn(
+        'object-contain',
+        size === 'md' ? 'h-20 w-64' : 'h-14 w-48'
+      )}
+    />
   );
 }
 
@@ -91,7 +68,6 @@ export function Navigation() {
   const location = useLocation();
   return (
     <>
-      {/* Desktop Sidebar */}
       <aside className="hidden lg:flex fixed left-0 top-0 h-screen w-64 flex-col glass-strong border-r border-border/50 z-40">
         <div className="p-6">
           <Link to="/">
@@ -124,7 +100,6 @@ export function Navigation() {
         </div>
       </aside>
 
-      {/* Mobile Top Bar */}
       <header className="lg:hidden fixed top-0 left-0 right-0 z-40 glass-strong border-b border-border/50 px-3 h-14 flex items-center justify-between">
         <Link to="/">
           <Logo size="sm" />
@@ -135,7 +110,6 @@ export function Navigation() {
         </div>
       </header>
 
-      {/* Mobile Bottom Nav */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 glass-strong border-t border-border/50 px-4 h-16 flex items-center justify-around">
         {navLinks.map((link) => {
           const isActive = location.pathname === link.href;
@@ -145,9 +119,7 @@ export function Navigation() {
               to={link.href}
               className={cn(
                 'flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl transition-all duration-200',
-                isActive
-                  ? 'text-primary'
-                  : 'text-muted-foreground'
+                isActive ? 'text-primary' : 'text-muted-foreground'
               )}
             >
               <link.icon className="w-5 h-5" />
